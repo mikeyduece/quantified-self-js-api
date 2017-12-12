@@ -32,7 +32,7 @@ app.get('/api/v1/foods/:id', (request, response) => {
     })
 })
 
-app.post('/api/v1/foods', function(request, response){
+app.post('/api/v1/foods', (request, response) => {
   let name = request.body.food.name
   let calories = request.body.food.calories
   Food.post(name, calories)
@@ -41,30 +41,27 @@ app.post('/api/v1/foods', function(request, response){
     })
 })
 
-app.delete('/api/v1/foods/:id', function(request, response) {
+app.delete('/api/v1/foods/:id', (request, response) => {
   let id = request.params.id
-  database.raw('DELETE FROM foods WHERE id=?', [id])
+  Food.delete(id)
     .then(() => {
       return response.sendStatus(204)
     })
 })
 
-app.put('/api/v1/foods/:id', function(request, response) {
+app.put('/api/v1/foods/:id', (request, response) => {
   let id = request.params.id
   let name = request.body.food.name
   let date = new Date
-  console.log(date)
   let calories = request.body.food.calories
-  database.raw(`UPDATE foods
-                SET name=?, calories=?, updated_at=?
-                WHERE id=?`, [name, calories, date, id])
+  Food.update(id, name, calories)
     .then((data) => {
       return response.sendStatus(202).json(data.rows[0])
     })
 })
 
 if (!module.parent) {
-  app.listen(app.get('port'), function() {
+  app.listen(app.get('port'), () => {
     console.log(`${app.locals.title} is running on ${app.get('port')}.`);
   });
 }
