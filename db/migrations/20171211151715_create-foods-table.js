@@ -9,6 +9,6 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  let dropQuery = `DROP TABLE foods`
+  let dropQuery = `TRUNCATE foods RESTART IDENTITY`
   return knex.raw(dropQuery)
 };
