@@ -1,21 +1,23 @@
 {
-  "name": "quantified-self-js-api",
+  "name": "qs-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "mocha"
+    "test": "NODE_ENV=test mocha test/*-test.js --exit"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "express": "^4.16.2",
-    "knex": "^0.14.2",
-    "pg": "^7.4.0"
-  },
+  "description": "",
   "devDependencies": {
     "chai": "^4.1.2",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "nodemon": "^1.12.1",
+    "request": "^2.83.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "knex": "^0.13.0",
+    "pg": "^7.3.0"
   }
 }
