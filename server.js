@@ -25,10 +25,9 @@ app.get('/api/v1/foods', function(request, response){
 
 app.get('/api/v1/foods/:id', function(request, response){
   var id = request.params.id
-  database.raw("SELECT * FROM foods WHERE id=?", [id])
+  Food.show(id)
     .then(function(data){
       if (data.rowCount == 0) { return response.sendStatus(404) }
-
       response.json(data.rows[0])
     })
 })
