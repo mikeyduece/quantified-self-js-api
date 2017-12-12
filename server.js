@@ -11,22 +11,22 @@ app.locals.title = 'Quantified Self'
 
 app.use(bodyParser.json())
 
-app.get('/', function(request, response){
+app.get('/', (request, response) => {
   response.send('this is the root page')
 })
 
-app.get('/api/v1/foods', function(request, response){
-    Food.all()
+app.get('/api/v1/foods', (request, response) => {
+  Food.all()
     .then((data) => {
       if(data.rowCount == 0){return response.sendStatus(404)}
       response.json(data.rows)
     })
 })
 
-app.get('/api/v1/foods/:id', function(request, response){
-  var id = request.params.id
+app.get('/api/v1/foods/:id', (request, response) => {
+  let id = request.params.id
   Food.show(id)
-    .then(function(data){
+    .then((data) => {
       if (data.rowCount == 0) { return response.sendStatus(404) }
       response.json(data.rows[0])
     })
@@ -35,8 +35,7 @@ app.get('/api/v1/foods/:id', function(request, response){
 app.post('/api/v1/foods', function(request, response){
   let name = request.body.food.name
   let calories = request.body.food.calories
-  database.raw('INSERT INTO foods (name, calories, created_at) VALUES (?,?,?) RETURNING name, calories',
-    [name, calories, new Date])
+  Food.post(name, calories)
     .then((data) => {
       return response.sendStatus(201).json(data.rows[0])
     })
