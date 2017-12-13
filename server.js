@@ -13,7 +13,7 @@ app.locals.title = 'Quantified Self'
 app.use(bodyParser.json())
 
 app.get('/', (request, response) => {
-  response.send('this is the root page')
+  response.sendFile(path.join(__dirname+'/welcome.html'))
 })
 
 app.get('/api/v1/foods', (request, response) => {
