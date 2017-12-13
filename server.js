@@ -89,6 +89,15 @@ app.post('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
     })
 })
 
+app.delete('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
+  let mealId = request.params.meal_id
+  let id      = request.params.id
+  Meal.delete(mealId, id)
+    .then(() => {
+      return response.sendStatus(204)
+    })
+})
+
 if (!module.parent) {
   app.listen(app.get('port'), () => {
     console.log(`${app.locals.title} is running on ${app.get('port')}.`);

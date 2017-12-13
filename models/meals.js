@@ -5,8 +5,8 @@ const database = require('knex')(configuration)
 module.exports = class Meal {
   static all() {
     return database.raw(`SELECT meals.id, meals.name, json_agg(foods.*) AS foods
-                       FROM meals JOIN meal_foods ON meals.id=meal_foods.meal_id
-                       JOIN foods ON meal_foods.food_id=foods.id GROUP BY meals.id;`)
+                         FROM meals JOIN meal_foods ON meals.id=meal_foods.meal_id
+                         JOIN foods ON meal_foods.food_id=foods.id GROUP BY meals.id;`)
   }
 
   static show(id) {
@@ -19,17 +19,14 @@ module.exports = class Meal {
   }
 
   static post(mealId, id) {
-    return database.transaction((t) => {
-      return database('meal_foods')
-        .transacting(t)
-        .insert({meal_id: mealId, food_id: id})
-        .then((response) => {
-          return database('meals')
-            .transacting(t)
-          update({updated_at: new Date})
-        })
-        .then(t.commit)
-        .then(t.rolback)
-    })
+    return database.raw(`INSERT INTO meal_foods AS mf (meal_id, food_id)
+                         VALUES (${mealId}, ${id})`)
+    return database.raw(`UPDATE meals SET updated_at=?
+                         WHERE meals.id=${mealId}`,[new Date])
+  }
+
+  static delete(mealId, id) {
+    return database.raw(`DELETE FROM meal_foods AS mf
+                       WHERE mf.meal_id=${mealId} AND mf.food_id=${id}`)
   }
 }
