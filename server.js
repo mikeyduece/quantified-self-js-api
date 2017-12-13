@@ -63,9 +63,6 @@ app.put('/api/v1/foods/:id', (request, response) => {
 
 app.get('/api/v1/meals', (request, response) => {
   Meal.all()
-  // return database.raw(`SELECT meals.id, meals.name, json_agg(foods.*) AS foods
-  //                      FROM meals JOIN meal_foods ON meals.id=meal_foods.meal_id
-  //                      JOIN foods ON meal_foods.food_id=foods.id GROUP BY meals.id;`)
     .then((data) => {
       console.log(data)
       if(data.rowCount == 0){return response.sendStatus(404)}
@@ -74,12 +71,8 @@ app.get('/api/v1/meals', (request, response) => {
 })
 
 app.get('/api/v1/meals/:meal_id/foods', (request, response) => {
-  let id = request.params.meal_id
-  return database.raw(`SELECT meals.id, meals.name, json_agg(foods.*) AS foods
-                       FROM meals JOIN meal_foods ON meals.id=meal_foods.meal_id
-                       JOIN foods ON meal_foods.food_id=foods.id
-                       WHERE meals.id=${id}
-                       GROUP BY meals.id`)
+  let meal_id = request.params.meal_id
+  Meal.show(meal_id)
     .then((data) => {
       console.log(data)
       if(data.rowCount == 0){return response.sendStatus(404)}

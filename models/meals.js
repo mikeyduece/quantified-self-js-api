@@ -10,5 +10,11 @@ module.exports = class Meal {
   }
 
   static show(id) {
+    console.log(id)
+    return database.raw(`SELECT meals.id, meals.name, json_agg(foods.*) AS foods
+                       FROM meals JOIN meal_foods ON meals.id=meal_foods.meal_id
+                       JOIN foods ON meal_foods.food_id=foods.id
+                       WHERE meals.id=${id}
+                       GROUP BY meals.id`)
   }
 }
