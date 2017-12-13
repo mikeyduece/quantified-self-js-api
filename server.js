@@ -60,6 +60,31 @@ app.put('/api/v1/foods/:id', (request, response) => {
     })
 })
 
+app.get('/api/v1/meals', (request, response) => {
+  return database.raw(`SELECT meals.id, meals.name, json_agg(foods.*) AS foods
+                       FROM meals JOIN meal_foods ON meals.id=meal_foods.meal_id
+                       JOIN foods ON meal_foods.food_id=foods.id GROUP BY meals.id;`)
+    .then((data) => {
+      console.log(data)
+      if(data.rowCount == 0){return response.sendStatus(404)}
+      response.json(data.rows)
+    })
+})
+
+app.get('/api/v1/meals/:meal_id/foods', (request, response) => {
+  let id = request.params.meal_id
+  return database.raw(`SELECT meals.id, meals.name, json_agg(foods.*) AS foods
+                       FROM meals JOIN meal_foods ON meals.id=meal_foods.meal_id
+                       JOIN foods ON meal_foods.food_id=foods.id
+                       WHERE meals.id=${id}
+                       GROUP BY meals.id`)
+    .then((data) => {
+      console.log(data)
+      if(data.rowCount == 0){return response.sendStatus(404)}
+      response.json(data.rows[0])
+    })
+})
+
 if (!module.parent) {
   app.listen(app.get('port'), () => {
     console.log(`${app.locals.title} is running on ${app.get('port')}.`);
