@@ -5,6 +5,7 @@ const environment = process.env.NODE_ENV || 'development'
 const configuration = require('./knexfile')[environment]
 const database = require('knex')(configuration)
 const Food = require('./models/foods')
+const Meal = require('./models/meals')
 
 app.set('port', process.env.PORT || 3000)
 app.locals.title = 'Quantified Self'
@@ -57,6 +58,43 @@ app.put('/api/v1/foods/:id', (request, response) => {
   Food.update(id, name, calories)
     .then((data) => {
       return response.sendStatus(202).json(data.rows[0])
+    })
+})
+
+app.get('/api/v1/meals', (request, response) => {
+  Meal.all()
+    .then((data) => {
+      console.log(data)
+      if(data.rowCount == 0){return response.sendStatus(404)}
+      response.json(data.rows)
+    })
+})
+
+app.get('/api/v1/meals/:meal_id/foods', (request, response) => {
+  let meal_id = request.params.meal_id
+  Meal.show(meal_id)
+    .then((data) => {
+      console.log(data)
+      if(data.rowCount == 0){return response.sendStatus(404)}
+      response.json(data.rows[0])
+    })
+})
+
+app.post('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
+  let mealId = request.params.meal_id
+  let id      = request.params.id
+  Meal.post(mealId, id)
+    .then((data) => {
+      return response.sendStatus(201).json(data.rows[0])
+    })
+})
+
+app.delete('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
+  let mealId = request.params.meal_id
+  let id      = request.params.id
+  Meal.delete(mealId, id)
+    .then(() => {
+      return response.sendStatus(204)
     })
 })
 
