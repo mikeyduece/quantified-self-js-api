@@ -27,6 +27,6 @@ module.exports = class Meal {
 
   static delete(mealId, id) {
     return database.raw(`DELETE FROM meal_foods AS mf
-                       WHERE mf.meal_id=${mealId} AND mf.food_id=${id}`)
+                       WHERE mf.meal_id=${mealId} AND mf.food_id=${id} LIMIT 1`)
   }
 }
