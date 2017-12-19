@@ -14,7 +14,7 @@ app.locals.title = 'Quantified Self'
 app.use(bodyParser.json())
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://snayrouz.github.io");
+  res.header("Access-Control-Allow-Origin", "https://mikeyduece.github.io, https://snayrouz.github.io");
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
@@ -91,25 +91,39 @@ app.get('/api/v1/meals/:meal_id/foods', (request, response) => {
 app.post('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
   let mealId = request.params.meal_id
   let id      = request.params.id
-  Meal.post(mealId, id)
+  database.raw(`SELECT * FROM foods WHERE id=${id}`)
     .then((data) => {
-      return response.sendStatus(201).json(data.rows[0])
+      if(data.rows.length === 0){
+        return response.sendStatus(404)
+      }else {
+        Meal.post(mealId, id)
+          .then((data) => {
+            return response.sendStatus(201).json(data.rows[0])
+          })
+      }
     })
 })
 
 app.delete('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
   let mealId = request.params.meal_id
   let id      = request.params.id
-  Meal.delete(mealId, id)
-    .then(() => {
-      return response.sendStatus(204)
+  database.raw(`SELECT * FROM foods WHERE id=${id}`)
+    .then((data) => {
+      if(data.rows.length === 0){
+        return response.sendStatus(404)
+      }else {
+        Meal.delete(mealId, id)
+          .then(() => {
+            return response.sendStatus(204)
+          })
+      }
     })
 })
 
-if (!module.parent) {
-  app.listen(app.get('port'), () => {
-    console.log(`${app.locals.title} is running on ${app.get('port')}.`);
-  });
-}
+  if (!module.parent) {
+    app.listen(app.get('port'), () => {
+      console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+    });
+  }
 
-module.exports = app
+  module.exports = app
