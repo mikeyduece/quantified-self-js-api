@@ -14,7 +14,12 @@ app.locals.title = 'Quantified Self'
 app.use(bodyParser.json())
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://mikeyduece.github.io, https://snayrouz.github.io");
+  let allowedOrigin = ["https://mikeyduece.github.io, https://snayrouz.github.io"]
+  var origin = req.headers.origin;
+  if(allowedOrigins.indexOf(origin) > -1){
+       res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  // res.header("Access-Control-Allow-Origin", "https://mikeyduece.github.io, https://snayrouz.github.io");
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
