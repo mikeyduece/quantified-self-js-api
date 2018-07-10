@@ -4,7 +4,7 @@ JavaScript backend for the quantified-self-client project. Both projects are par
 
 ### Base url is `https://qs-js-api.herokuapp.com/api/v1`
 
-#### Available Endpoints are:
+#### Food Resources
 
 `GET /foods`
 > Retrieves a list of all the foods that have been entered into the DB
