@@ -29,14 +29,17 @@ Format for updating existing foods should look as follows:
 
 `GET /api/v1/meals` 
   > returns all the meals in the database along with their associated foods
+  
 `GET /api/v1/meals/:meal_id/foods` 
-  > returns all the foods associated with the meal with an id specified by `:meal_id` or a `404` if the meal is not found
+  > returns all the foods associated with the meal with an id specified by `:meal_id`
+  
 `POST /api/v1/meals/:meal_id/foods/:id` 
   > adds the food with `:id` to the meal with `:meal_id`
-  This creates a new record in the MealFoods table to establish the relationship between this food and meal. If the meal/food cannot be found, a `404` will be returned.
+  This creates a new record in the MealFoods table to establish the relationship between this food and meal. 
+  
 `DELETE /api/v1/meals/:meal_id/foods/:id` 
   > removes the food with :id from the meal with `:meal_id`
-  This deletes the existing record in the MealFoods table that creates the relationship between this food and meal. If the meal/food cannot be found, a `404` will be returned.
+  This deletes the existing record in the MealFoods table that creates the relationship between this food and meal. 
 
 
 
