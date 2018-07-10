@@ -2,9 +2,9 @@
 
 JavaScript backend for the quantified-self-client project. Both projects are part of Turing's Mod4 curriculum and the backend's introduction to JavaScript
 
-### Base url is `https://qs-js-api.herokuapp.com/api/v1`
+##### Base url is `https://qs-js-api.herokuapp.com/api/v1`
 
-#### Food Resources
+### Food Resources
 
 `GET /foods`
 > Retrieves a list of all the foods that have been entered into the DB
